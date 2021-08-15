@@ -8,4 +8,4 @@ set(SIMPLEAPP_SOURCES
 )
 
 add_executable(simpleapp ${SIMPLEAPP_SOURCES})
-target_link_libraries(simpleapp sa_utils)
+target_link_libraries(simpleapp sa::utilslib)

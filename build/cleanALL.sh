@@ -13,4 +13,5 @@ rm -fr bin docs src tests external \
 		ZERO_CHECK.vcxproj.filters \
 		myeasylog.log \
 		CMakeDoxyfile.in \
-		CMakeDoxygenDefaults.cmake
+		CMakeDoxygenDefaults.cmake \
+		simpleprojcpp.sln

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "easylogging++.h"
-#include "sa_application.h"
+#include "sa_LoggingUtils.h"
 
 INITIALIZE_EASYLOGGINGPP
 
