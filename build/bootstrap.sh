@@ -8,12 +8,13 @@ set -o errexit -o pipefail -o noclobber -o nounset
 
 usage()
 {
-  echo "Usage: $0 [--osg] [--eigen] [--platform NAME]"
+  echo "Usage: $0 [--osg] [--eigen] [--platform NAME] [--vs-version VERSION]"
 
   cat <<-EOH
 Arguments: 
      --osg                 configure to use OpenSceneGraph
      --platform NAME       configure given platform e.g. Win32, x64 (default is Win32)
+     --vs-version VERSIOn  Visual Studio version (e.g. 2015, 2019)
 EOH
 }
 
@@ -26,7 +27,7 @@ if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
 fi
 
 OPTIONS=hv
-LONGOPTS=help,osg,verbose,platform:
+LONGOPTS=help,osg,verbose,platform:,vs-version:
 
 # -regarding ! and PIPESTATUS see above
 # -temporarily store output to be able to check for errors
@@ -45,6 +46,7 @@ eval set -- "$PARSED"
 
 use_osg="OFF"
 platform="Win32"
+vs_version="2015"
 
 # now enjoy the options in order and nicely split until we see --
 while true; do
@@ -64,6 +66,11 @@ while true; do
 		--platform)
 			shift
 			platform=$1
+			shift
+			;;
+		--vs-version)
+			shift
+			vs_version=$1
 			shift
 			;;
         --)
@@ -103,9 +110,17 @@ echo "Installation directory: $NEWTONBODIES_INSTALL"
 echo "---------------------------------------------"
 echo ""
 
+if [ ${vs_version} == "2015" ]; then
+	vs_generator="Visual Studio 14 2015"
+elif [ ${vs_version} == "2019" ]; then
+	vs_generator="Visual Studio 16 2019"
+else
+	echo "ERROR - Visual Studio version not supported: ${vs_version}"
+	exit 1
+fi
 
 if [ ${machine} == "MinGw" ]; then
-  cmake -G "Visual Studio 14 2015" -A ${platform}  \
+  cmake -G "${vs_generator}" -A ${platform}  \
                            -DUSE_OSG::BOOL=${use_osg} \
 						   ..
 elif  [ ${machine} == "Linux" ]; then
